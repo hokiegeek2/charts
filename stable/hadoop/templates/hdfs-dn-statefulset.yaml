@@ -19,6 +19,8 @@ spec:
         release: {{ .Release.Name }}
         component: hdfs-dn
     spec:
+      nodeSelector:
+        {{ .Values.dnNodeSelector }}
       affinity:
         podAntiAffinity:
         {{- if eq .Values.antiAffinity "hard" }}
