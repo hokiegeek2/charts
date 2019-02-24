@@ -1,0 +1,15 @@
+# A headless service to create DNS records
+apiVersion: v1
+kind: Service
+metadata:
+  name: hdfs-hadoop-hdfs-nn-0
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local 
+  ports:
+  - name: webhdfs
+    protocol: TCP
+    port: 50070
+    targetPort: 50070
+  selector:
+    statefulset.kubernetes.io/pod-name: hdfs-hadoop-hdfs-nn-0

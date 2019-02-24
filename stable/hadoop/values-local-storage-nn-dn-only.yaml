@@ -9,10 +9,12 @@ image:
 hadoopVersion: 2.9.0
 
 # Select antiAffinity as either hard or soft, default is soft
-antiAffinity: "soft"
+antiAffinity: "hard"
 
-nnNodeSelector: namenode-host: "true"
-dnNodeSelector: datanode-host: "true"
+nnNodeSelector: 
+  namenode-host: "true"
+dnNodeSelector: 
+  datanode-host: "true"
 
 hdfs:
   nameNode:
@@ -55,7 +57,7 @@ yarn:
     pdbMinAvailable: 0
 
     # The number of YARN NodeManager instances.
-    replicas: 2
+    replicas: 0
 
     # Create statefulsets in parallel (K8S 1.7+)
     parallelCreate: false
@@ -75,10 +77,10 @@ persistence:
     enabled: true
     storageClass: "local-storage"
     accessMode: ReadWriteOnce
-    size: 5Gi
+    size: 1Gi
 
   dataNode:
     enabled: true
     storageClass: "local-storage"
     accessMode: ReadWriteOnce
-    size: 25Gi
+    size: 5Gi
