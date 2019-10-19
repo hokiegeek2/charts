@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 ## The StatefulSet installs 3 pods by default
-replicas: 3
+replicas: 5
 
 ## The kafka image repository
 image: "confluentinc/cp-kafka"
@@ -17,13 +17,13 @@ imagePullPolicy: "IfNotPresent"
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-resources: {}
-  # limits:
-  #   cpu: 200m
-  #   memory: 1536Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 1024Mi
+resources:
+  limits:
+    cpu: 1000m
+    memory: 2048Mi
+  requests:
+    cpu: 1000m
+    memory: 2048Mi
 kafkaHeapOptions: "-Xmx1G -Xms1G"
 
 ## The StatefulSet Update Strategy which Kafka will use when changes are applied.
@@ -95,7 +95,8 @@ affinity: {}
 
 ## Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
-nodeSelector: {}
+nodeSelector:
+  kafka-node: "true"
 
 ## Readiness probe config.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
@@ -198,7 +199,7 @@ persistence:
   ## The location within the Kafka container where the PV will mount its storage and Kafka will
   ## store its logs.
   ##
-  mountPath: "/opt/kafka/data"
+  mountPath: "/mnt/k8s/kafka"
 
   ## Kafka data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
@@ -207,7 +208,7 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass:
+  storageClass: local-storage
 
 jmx:
   ## Rules to apply to the Prometheus JMX Exporter.  Note while lots of stats have been cleaned and exposed,
@@ -367,7 +368,7 @@ topics: []
 zookeeper:
   ## If true, install the Zookeeper chart alongside Kafka
   ## ref: https://github.com/kubernetes/charts/tree/master/incubator/zookeeper
-  enabled: true
+  enabled: false
 
   ## Configure Zookeeper resource requests and limits
   ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -389,7 +390,7 @@ zookeeper:
     PullPolicy: "IfNotPresent"
 
   ## If the Zookeeper Chart is disabled a URL and port are required to connect
-  url: ""
+  url: "zookeeper.zookeeper"
   port: 2181
 
   ## Pod scheduling preferences (by default keep pods within a release on separate nodes).
