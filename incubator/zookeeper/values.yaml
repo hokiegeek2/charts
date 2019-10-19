@@ -54,21 +54,22 @@ ports:
     containerPort: 2888  # Port number for zookeeper container server port.
     protocol: TCP  # Protocol for zookeeper container server port.
 
-resources: {}  # Optionally specify how much CPU and memory (RAM) each zookeeper container needs.
+resources:  # Optionally specify how much CPU and memory (RAM) each zookeeper container needs.
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 500m
+    memory: 512Mi
 
 priorityClassName: ""
 
-nodeSelector: {}  # Node label-values required to run zookeeper pods.
+nodeSelector:
+  zk-node: "true"
 
 tolerations: []  # Node taint overrides for zookeeper pods.
 
@@ -139,9 +140,9 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
+  storageClass: "local-storage"
   accessMode: ReadWriteOnce
-  size: 5Gi
+  size: 1Gi
 
 ## Exporters query apps for metrics and make those metrics available for
 ## Prometheus to scrape.
